@@ -1,0 +1,38 @@
+-viewVersion tests: 
+/vcp -viewVersion [insert]
+
+Version3_textfile.txt // if only 2 versions exists
+VErsion2_textfile.txt // test mix of capital and noncapital letters
+Vwrsion4_textfile.txt // test if error handling catches mispelling and invalid version #
+Version_textfile.txt // test if error handling catches when no version # is added
+Version1_teeeee.c    // Handle if teeee.c doesn't exist (invalid file name)
+.c, .txt, .md // save different files (must have .[file extension])
+
+-listVersions tests:
+/vcp -listVersions [insert]
+
+Version3_textfile.txt  // only takes filename not version numbers (access directory not direct file ver)
+textfile // handling no extension and invalid entry
+
+
+-saveVersion tests: 
+/vcp -saveVersion [insert]
+
+Version3_textfile.txt // saves current file state, not specific version that already is saved in directory
+textfile.c // normal entry
+idontexist.c // enter a file that doesn't exist
+
+General Testing:
+Check if too many args are provided
+Check if too few args are provided
+Check if invalid flags are provided
+Saved long files like lab with broken.c
+Saved short files and medium files like getlinetest.txt
+Saved txt, c, md files etc
+
+Only inside QEMU using echo can you test multiple versions of saving, viewing, listing due to limitations of xv6
+If files are in os-[insert your id] and specified in makefile correctly, inside qemu you can save a version of that 
+outside file however, any changes made back outside QEMU will not be reflected when trying to save it again in QEMU
+due to xv6 limitations. It will save the past file version again and populate it as version 2 which can be used with 
+all flags as normal but again due to the limitations of xv6, the new changes will not be seen in QEMU thus the reason
+for echo to test the actual changes being saved and overwritten accordingly.

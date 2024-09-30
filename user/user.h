@@ -1,3 +1,16 @@
+#define NULL ((void *) 0)
+
+#define bool _Bool
+#define true 1
+#define false 0
+
+#define SEEK_SET        0
+#define STDIN_FILENO    0
+#define SEEK_CUR        1
+#define STDOUT_FILENO   1
+#define SEEK_END        2
+#define STDERR_FILENO   2
+
 struct stat;
 
 // system calls
@@ -22,6 +35,9 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int reboot(void);
+int shutdown(void);
+uint64 timestamp(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -32,8 +48,8 @@ int strcmp(const char*, const char*);
 void fprintf(int, const char*, ...);
 void printf(const char*, ...);
 char* gets(char*, int max);
-int fgets(int fd, char*, int max);
-int getline(char **lineptr, uint *n, int fd);
+int fgets(int fd, char *buf, int max);
+int getline(char **ptr, uint *size, int fd);
 uint strlen(const char*);
 void* memset(void*, int, uint);
 void* malloc(uint);
