@@ -1,0 +1,48 @@
+vcp
+
+The "vcp" command revolves around the idea of a version control/backup program. A hidden root directory (vctl) is created when the command is ran; within it a sub-directory with the name of the file we are working with is also created. Within this sub-directory a maximum of 3 files can be saved (in essence 3 different versions of the sub-directory's file name).
+
+    Example: vctl / filename / Version1_filename
+    The point is to be able to save the most important versions of a program so that if necessary, the user can come back and review past versions of that exact program and extract the needed info that can be applied in the user's current program. When 3 versions already exist for a specific file and the user wants to save another version, the oldest of the 3 versions will be overwritten upon confirmation that the user agrees upon this process. If agreed, all existing versions will be shifted forward and renamed and the newest version will be added to the version control directory.
+
+    Example: Version2_filename -> Version1_filename, Version3_filename -> Version2_filename and filename -> Version3_filename
+
+Added Files:
+user/vcp.c
+// Testing
+FogOS-VCP/getlinetest.txt
+FogOS-VCP/vcpTest.txt
+our lab with broken.c to test long files
+
+Modifications:
+FogOS-VCP/Makefile
+
+Flags:
+
+    (-saveVersion): saves the current state of the file as a new version and label it with its respective version number
+
+    (-listVersions) : displays a list of all saved versions of the specified file for example: Version3_filename.txt
+
+    (-viewVersion) : displays the selected file version existing in the list of file versions for the specified file like the format of 'cat [filename]' allowing user to copy and access functions or implementations they wish they didn't get rid of etc. For example: /vcp -viewVersion Version2_filename.txt
+
+How to Test | How it Works | Limitations:
+You can refer to the file vcpTest.txt where I included examples of how to test the program within QEMU.
+As of now you can only test with files in your OS directory (where your Makefile exists) or with files you create in QEMU with echo. Future implementation will handle accessing files from other directories.
+Due to limitations in xv6: only inside QEMU using echo can you really see the multiple versions of saving, viewing, and listing [refer to vcpTest.txt for why]. Saving, viewing, and listing can also be done for files in OS but not in the way the program was designed [vcpTest.txt]
+
+If testing in OS, ensure the file is added to your Makefile fs.img: 2nd line only. Do not make clean after you save versions as this will erase all versions and directories you've saved with vcp (due to xv6 limitations). You can exit QEMU and then rerun QEMU and the data will still be there.
+Inside QEMU:
+
+    /vcp -saveVersion filename.txt
+    /vcp -listVersions filename.txt
+    /vcp -viewVersion Version1_filename.txt
+    The program will work like normal, saving max 3 versions and overwriting but all versions will have same content (but they are separate files [refer to vcpTest.txt])
+
+If testing inside QEMU: create a program with content like so
+
+    echo "content you want" > filename.txt (any extension)
+    /vcp -saveVersion filename.txt
+    echo "different content" > filename.txt (to change the file content)
+    /vcp -saveVersion filename.txt
+    Now you can /vcp -listVersions filename.txt
+    and then you can view each version. If you want to try overwriting, save more than 3 versions and then check if everything has been shifted forward
